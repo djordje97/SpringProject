@@ -1,0 +1,1 @@
+INSERT INTO users(name,username,password) VALUES ('aa','aa','aa')
