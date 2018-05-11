@@ -41,6 +41,30 @@ public class User implements Serializable {
         this.posts = posts;
     }
 
+    public void add(Post p){
+        if(p.getUser()!=null)
+            p.getUser().getPosts().remove(p);
+        p.setUser(this);
+        getPosts().add(p);
+    }
+
+    public  void remove(Post p){
+        p.setUser(null);
+        getPosts().remove(p);
+    }
+
+    public void add(Comment c){
+        if(c.getUser() != null)
+            c.getUser().getComments().remove(c);
+        c.setUser(this);
+        getComments().add(c);
+    }
+
+    public void remove(Comment c){
+        c.setUser(null);
+        getComments().remove(c);
+    }
+
     public Integer getId() {
         return id;
     }

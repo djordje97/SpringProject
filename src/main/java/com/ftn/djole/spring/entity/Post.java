@@ -65,6 +65,18 @@ public class Post implements Serializable {
         this.tags = tags;
     }
 
+    public void add(Comment c){
+        if(c.getPost()!= null)
+            c.getPost().getComments().remove(c);
+        c.setPost(this);
+        getComments().add(c);
+    }
+
+    public void remov(Comment c){
+        c.setPost(null);
+        getComments().remove(c);
+    }
+
     public Integer getId() {
         return id;
     }
