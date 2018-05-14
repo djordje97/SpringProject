@@ -8,6 +8,8 @@ public interface UserServiceIterface {
 
     User findOne(Integer userId);
 
+    User findByUsername(String username);
+
     List<User> findAll();
 
     User save(User users);

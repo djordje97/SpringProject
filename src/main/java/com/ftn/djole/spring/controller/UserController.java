@@ -36,6 +36,14 @@ public class UserController {
         return  new ResponseEntity<UserDTO>(new UserDTO(user),HttpStatus.OK);
     }
 
+    @GetMapping(value = "/get/{username}")
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable("username") String username){
+        User user=userServiceIterface.findByUsername(username);
+        if(user ==null)
+            return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
+        return  new ResponseEntity<UserDTO>(new UserDTO(user),HttpStatus.OK);
+    }
+
     @PostMapping(consumes = "application/json")
     public ResponseEntity<UserDTO>saveUser(@RequestBody UserDTO userDTO){
         User user=new User();

@@ -72,7 +72,7 @@ public class Post implements Serializable {
         getComments().add(c);
     }
 
-    public void remov(Comment c){
+    public void remove(Comment c){
         c.setPost(null);
         getComments().remove(c);
     }

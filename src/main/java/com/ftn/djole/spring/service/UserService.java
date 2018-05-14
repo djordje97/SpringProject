@@ -24,6 +24,11 @@ public class UserService implements UserServiceIterface {
     }
 
     @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
     public User save(User users) {
         return userRepository.save(users);
     }

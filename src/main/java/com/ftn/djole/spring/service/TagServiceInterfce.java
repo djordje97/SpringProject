@@ -12,4 +12,6 @@ public interface TagServiceInterfce {
     Tag save(Tag tags);
 
     void remove(Integer id);
+
+    List<Tag> findByPosts_Id(Integer postId);
 }

@@ -32,4 +32,9 @@ public class TagService implements TagServiceInterfce {
     public void remove(Integer id) {
         tagRepository.deleteById(id);
     }
+
+    @Override
+    public List<Tag> findByPosts_Id(Integer postId) {
+        return tagRepository.findByPosts_Id(postId);
+    }
 }
