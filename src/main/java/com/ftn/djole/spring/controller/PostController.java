@@ -104,7 +104,7 @@ public class PostController {
     public ResponseEntity<Void> deletePost(@PathVariable("id")Integer id){
         Post post=postServiceInterface.findOne(id);
         if(post == null)
-            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         postServiceInterface.remove(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

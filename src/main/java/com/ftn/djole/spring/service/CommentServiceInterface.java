@@ -13,4 +13,6 @@ public interface CommentServiceInterface {
     Comment save(Comment comments);
 
     void remove(Integer id);
+
+    List<Comment> findByPost_Id(Integer postId);
 }

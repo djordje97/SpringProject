@@ -32,4 +32,9 @@ public class CommentService implements CommentServiceInterface{
     public void remove(Integer id) {
         commentRepository.deleteById(id);
     }
+
+    @Override
+    public List<Comment> findByPost_Id(Integer postId) {
+        return commentRepository.findByPost_Id(postId);
+    }
 }

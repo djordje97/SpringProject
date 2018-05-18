@@ -33,4 +33,9 @@ public class PostService implements PostServiceInterface {
     public void remove(Integer id) {
         postRepository.deleteById(id);
     }
+
+    @Override
+    public List<Post> findByTags_Id(Integer tagId) {
+        return postRepository.findByTags_Id(tagId);
+    }
 }

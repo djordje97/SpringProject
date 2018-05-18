@@ -10,6 +10,8 @@ public interface PostServiceInterface {
 
     List<Post> findAll();
 
+    List<Post> findByTags_Id(Integer tagId);
+
     Post save(Post posts);
 
     void remove(Integer id);
