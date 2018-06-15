@@ -1,5 +1,11 @@
-INSERT INTO users(name,username,password) VALUES ('Petar Petrovic','pera','123');
-INSERT INTO users(name,username,password) VALUES ('Marko Markovic','marko','123');
+INSERT INTO users(name,username,password) VALUES ('Petar Petrovic','pera','$2a$12$LtbYtEzOBdnsiD/E9Wtj2OEpK7kd3L7dHa5VoIzukKvjBWlReBAAW');
+INSERT INTO users(name,username,password) VALUES ('Marko Markovic','marko','$2a$12$LtbYtEzOBdnsiD/E9Wtj2OEpK7kd3L7dHa5VoIzukKvjBWlReBAAW');
+
+INSERT INTO authority(name) VALUES ('ROLE_USER');
+INSERT INTO authority(name) VALUES ('ROLE_ADMIN');
+
+INSERT INTO user_authority VALUES (1,1);
+INSERT INTO user_authority VALUES (1,2);
 
 INSERT INTO posts(title,description,date,likes,dislikes,latitude,longitude,user_id)VALUES ('Avengers infinity war','New and best movie','2018-4-16',20,4,147.55,17.21,1);
 

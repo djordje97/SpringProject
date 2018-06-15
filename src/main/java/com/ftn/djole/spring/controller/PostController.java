@@ -61,7 +61,7 @@ public class PostController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<PostDTO> savePost(@RequestBody PostDTO postDTO,@PathVariable("id")Integer id){
+    public ResponseEntity<PostDTO> savePost(@RequestBody PostDTO postDTO){
         Post post=new Post();
         post.setTitle(postDTO.getTitle());
         post.setDescription(postDTO.getDescription());

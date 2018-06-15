@@ -1,14 +1,19 @@
 package com.ftn.djole.spring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User implements Serializable,UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id",unique = true,nullable = false)
@@ -29,16 +34,22 @@ public class User implements Serializable {
     @OneToMany(cascade = {CascadeType.ALL},fetch = FetchType.LAZY,mappedBy = "user")
     private Set<Post> posts=new HashSet<Post>();
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "authority_id"))
+    private Set<Authority>userAuthority=new HashSet<Authority>();
     public User() {
     }
 
-    public User(String name, String username, String password, byte[] photo, Set<Comment> comments, Set<Post> posts) {
+    public User(String name, String username, String password, byte[] photo, Set<Comment> comments, Set<Post> posts, Set<Authority> userAuthority) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.photo = photo;
         this.comments = comments;
         this.posts = posts;
+        this.userAuthority = userAuthority;
     }
 
     public void add(Post p){
@@ -121,6 +132,41 @@ public class User implements Serializable {
         this.posts = posts;
     }
 
+    public Set<Authority> getUserAuthority() {
+        return userAuthority;
+    }
+
+    public void setUserAuthority(Set<Authority> userAuthority) {
+        this.userAuthority = userAuthority;
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.userAuthority;
+    }
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
     @Override
     public String toString() {
         return "Users{" +
