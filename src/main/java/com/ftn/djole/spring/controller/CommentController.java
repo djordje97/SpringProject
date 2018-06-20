@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -68,7 +69,8 @@ public class CommentController {
         Comment comment=new Comment();
         comment.setTitle(commentDTO.getTitle());
         comment.setDescription(commentDTO.getDescription());
-        comment.setDate(commentDTO.getDate());
+        Date now=new Date();
+        comment.setDate(now);
         comment.setLikes(commentDTO.getLikes());
         comment.setDislike(commentDTO.getDislikes());
         comment.setUser(userServiceIterface.findOne(commentDTO.getUser().getId()));

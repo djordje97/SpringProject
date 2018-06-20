@@ -1,10 +1,9 @@
 package com.ftn.djole.spring.repository;
 
 import com.ftn.djole.spring.entity.Authority;
-import com.ftn.djole.spring.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User,Integer> {
+public interface AuthorityReposittory extends JpaRepository<Authority,Integer> {
 
-    User findByUsername(String username);
+    Authority findByName(String name);
 }

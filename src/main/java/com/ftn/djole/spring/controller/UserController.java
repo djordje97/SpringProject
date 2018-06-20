@@ -1,14 +1,20 @@
 package com.ftn.djole.spring.controller;
 
 import com.ftn.djole.spring.dto.UserDTO;
+import com.ftn.djole.spring.entity.Authority;
 import com.ftn.djole.spring.entity.User;
+import com.ftn.djole.spring.service.AuthorityServiceInterface;
 import com.ftn.djole.spring.service.UserServiceIterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -17,6 +23,12 @@ public class UserController {
 
     @Autowired
     UserServiceIterface userServiceIterface;
+
+    @Autowired
+    AuthorityServiceInterface authorityServiceInterface;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>>getUsers(){
@@ -36,6 +48,45 @@ public class UserController {
         return  new ResponseEntity<UserDTO>(new UserDTO(user),HttpStatus.OK);
     }
 
+    @RequestMapping(value ="/logged" )
+    @PreAuthorize("hasRole('USER') or  hasRole('COMMENTATOR') or hasRole('ADMIN')")
+
+    public ResponseEntity<UserDTO> user(Principal user){
+        User userL=userServiceIterface.findByUsername(user.getName());
+        return new ResponseEntity<>(new UserDTO(userL),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/get/role/{username}")
+    public ResponseEntity<Authority>getRole(@PathVariable String username){
+        User user=userServiceIterface.findByUsername(username);
+        String role=user.getUserAuthority().iterator().next().getName();
+        Authority authority=authorityServiceInterface.findByName(role);
+        return new ResponseEntity<Authority>(authority,HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/allUsername")
+    public ResponseEntity<List<String>> allUsernames(){
+        List<User> allUsers=userServiceIterface.findAll();
+        List<String>usernames=new ArrayList<>();
+        for (User u : allUsers) {
+            usernames.add(u.getUsername());
+        }
+
+        return new ResponseEntity<List<String>>(usernames,HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/role/{username}/{roleName}")
+    ResponseEntity<Boolean> addRole(@PathVariable String username,@PathVariable String roleName){
+        User u=userServiceIterface.findByUsername(username);
+        Authority authority=authorityServiceInterface.findByName(roleName);
+
+        u.getUserAuthority().add(authority);
+        userServiceIterface.save(u);
+
+        return new ResponseEntity<>(true,HttpStatus.OK);
+    }
+
     @GetMapping(value = "/get/{username}")
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable("username") String username){
         User user=userServiceIterface.findByUsername(username);
@@ -49,7 +100,7 @@ public class UserController {
         User user=new User();
         user.setName(userDTO.getName());
         user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setPhoto(userDTO.getPhoto());
         user=userServiceIterface.save(user);
         return new ResponseEntity<UserDTO>(new UserDTO(user),HttpStatus.CREATED);

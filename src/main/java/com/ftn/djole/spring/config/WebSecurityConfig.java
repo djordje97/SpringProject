@@ -67,12 +67,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //svim korisnicima dopusti da pristupe putanjama /auth/**
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/users").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/users/role/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/get/role/**").permitAll()
                 //svaki zahtev mora biti autorizovan
                 .anyRequest().authenticated().and()
                 //presretni svaki zahtev filterom
-                .addFilterBefore(new TokenAuthenticationFilter(tokenHelper, jwtUserDetailsService), BasicAuthenticationFilter.class);
+                .addFilterBefore(new TokenAuthenticationFilter(tokenHelper, jwtUserDetailsService), BasicAuthenticationFilter.class)
 
-        http.csrf().disable();
+        .csrf().disable();
     }
 
 
@@ -82,8 +85,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // TokenAuthenticationFilter ce ignorisati sve ispod navedene putanje
         web.ignoring().antMatchers(
                 HttpMethod.POST,
-                "api/auth/login"
+                "/api/auth/login",
+                "/api/users"
+
         );
+        web.ignoring().antMatchers(HttpMethod.PUT,"/api/users/role/**");
         web.ignoring().antMatchers(
                 HttpMethod.GET,
                 "/",
@@ -94,7 +100,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/**/*.css",
                 "/**/*.js",
                 "/api/posts/**",
-                "/api/comments/**"
+                "/api/comments/**",
+                "/api/users/allUsername",
+               "/api/get/role/**"
         );
 
     }

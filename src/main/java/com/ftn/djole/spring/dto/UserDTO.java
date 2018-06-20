@@ -1,6 +1,8 @@
 package com.ftn.djole.spring.dto;
 
 import com.ftn.djole.spring.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
 
@@ -12,6 +14,7 @@ public class UserDTO implements Serializable {
     private String password;
     private byte[] photo;
 
+
     public UserDTO() {
     }
 
@@ -22,6 +25,7 @@ public class UserDTO implements Serializable {
         this.password = password;
         this.photo = photo;
     }
+
 
     public UserDTO(User user) {
         this(user.getId(),user.getName(),user.getUsername(),user.getPassword(),user.getPhoto());
@@ -66,4 +70,5 @@ public class UserDTO implements Serializable {
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
+
 }
