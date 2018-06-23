@@ -45,7 +45,7 @@ public class TagController {
         return  new ResponseEntity<TagDTO>(new TagDTO(tag),HttpStatus.OK);
     }
 
-    @GetMapping(value = "post/{id}")
+    @GetMapping(value = "/post/{id}")
     public ResponseEntity<List<PostDTO>>getPostsByTag(@PathVariable("id") Integer id){
         List<Post> posts=postServiceInterface.findByTags_Id(id);
         List<PostDTO>postDTOS=new ArrayList<>();
@@ -63,6 +63,15 @@ public class TagController {
 
         tag=tagServiceInterfce.save(tag);
         return new ResponseEntity<TagDTO>(new TagDTO(tag),HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/add/{postId}/{tagId}")
+    public ResponseEntity<Void>addTagInPost(@PathVariable("postId") Integer postId,@PathVariable("tagId") Integer tagId){
+        Post post=postServiceInterface.findOne(postId);
+        Tag tag=tagServiceInterfce.findOne(tagId);
+        post.getTags().add(tag);
+        post=postServiceInterface.save(post);
+        return  new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}",consumes = "application/json")

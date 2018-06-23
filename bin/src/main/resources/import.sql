@@ -1,4 +1,4 @@
-                                                              INSERT INTO users(name,username,password) VALUES ('Petar Petrovic','pera','$2a$12$LtbYtEzOBdnsiD/E9Wtj2OEpK7kd3L7dHa5VoIzukKvjBWlReBAAW');
+INSERT INTO users(name,username,password) VALUES ('Petar Petrovic','pera','$2a$12$LtbYtEzOBdnsiD/E9Wtj2OEpK7kd3L7dHa5VoIzukKvjBWlReBAAW');
 INSERT INTO users(name,username,password) VALUES ('Marko Markovic','marko','$2a$12$LtbYtEzOBdnsiD/E9Wtj2OEpK7kd3L7dHa5VoIzukKvjBWlReBAAW');
 
 INSERT INTO authority(name) VALUES ('ROLE_USER');

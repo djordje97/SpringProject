@@ -5,6 +5,8 @@ import com.ftn.djole.spring.entity.Authority;
 import com.ftn.djole.spring.entity.User;
 import com.ftn.djole.spring.service.AuthorityServiceInterface;
 import com.ftn.djole.spring.service.UserServiceIterface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +14,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+
+import javax.servlet.ServletContext;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashSet;
+
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/users")
 public class UserController {
+
 
     @Autowired
     UserServiceIterface userServiceIterface;
@@ -29,6 +34,9 @@ public class UserController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    ServletContext context;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>>getUsers(){
@@ -53,6 +61,7 @@ public class UserController {
 
     public ResponseEntity<UserDTO> user(Principal user){
         User userL=userServiceIterface.findByUsername(user.getName());
+
         return new ResponseEntity<>(new UserDTO(userL),HttpStatus.OK);
     }
 
@@ -80,10 +89,10 @@ public class UserController {
     ResponseEntity<Boolean> addRole(@PathVariable String username,@PathVariable String roleName){
         User u=userServiceIterface.findByUsername(username);
         Authority authority=authorityServiceInterface.findByName(roleName);
-
-        u.getUserAuthority().add(authority);
-        userServiceIterface.save(u);
-
+        if(u.getUserAuthority().size() >0) {
+            u.getUserAuthority().clear();
+            userServiceIterface.save(u);
+        }
         return new ResponseEntity<>(true,HttpStatus.OK);
     }
 
@@ -113,7 +122,6 @@ public class UserController {
         if(user == null)
             return new ResponseEntity<UserDTO>(HttpStatus.BAD_REQUEST);
         user.setName(userDTO.getName());
-        user.setPassword(userDTO.getPassword());
         user.setPhoto(userDTO.getPhoto());
 
         user=userServiceIterface.save(user);

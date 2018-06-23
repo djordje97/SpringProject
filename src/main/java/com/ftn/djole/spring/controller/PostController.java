@@ -10,9 +10,11 @@ import com.ftn.djole.spring.service.UserServiceIterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -46,7 +48,7 @@ public class PostController {
         return new ResponseEntity<PostDTO>(new PostDTO(post),HttpStatus.OK);
     }
 
-    @GetMapping(value = "tag/{id}")
+    @GetMapping(value = "/tag/{id}")
     public ResponseEntity<List<TagDTO>> getTagByPost(@PathVariable("id") Integer id){
         List<Tag> tags=tagServiceInterfce.findByPosts_Id(id);
         List<TagDTO>tagDTOS=new ArrayList<>();
@@ -61,13 +63,15 @@ public class PostController {
     }
 
     @PostMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<PostDTO> savePost(@RequestBody PostDTO postDTO){
         Post post=new Post();
         post.setTitle(postDTO.getTitle());
         post.setDescription(postDTO.getDescription());
         post.setLikes(postDTO.getLikes());
         post.setDislike(postDTO.getDislike());
-        post.setDate(postDTO.getDate());
+        Date now=new Date();
+        post.setDate(now);
         post.setLatitude(postDTO.getLatitude());
         post.setLongitude(postDTO.getLongitude());
         post.setPhoto(postDTO.getPhoto());
