@@ -64,6 +64,25 @@ public class CommentController {
         return new ResponseEntity<List<CommentDTO>>(commentDTOS,HttpStatus.OK);
     }
 
+    @GetMapping(value = "/post/order/{id}/{orderBy}")
+    public ResponseEntity<List<CommentDTO>>getCommentsByPostOrdered(@PathVariable("id")Integer id,@PathVariable("orderBy") String orderBy){
+        List<Comment> comments=null;
+        if(orderBy.equals("date")){
+            comments=commentServiceInterface.findAllByPost_IdOrderByDate(id);
+        }else if(orderBy.equals("likes")){
+            comments=commentServiceInterface.findAllByPost_IdOrderByLike(id);
+        }
+        else{
+            comments=commentServiceInterface.findAllByPost_IdOrderByDislike(id);
+        }
+        List<CommentDTO>commentDTOS=new ArrayList<>();
+        for (Comment comment:comments) {
+            commentDTOS.add(new CommentDTO(comment));
+        }
+
+        return new ResponseEntity<List<CommentDTO>>(commentDTOS,HttpStatus.OK);
+    }
+
     @PostMapping(consumes = "application/json")
     public ResponseEntity<CommentDTO> addPost(@RequestBody CommentDTO commentDTO){
         Comment comment=new Comment();

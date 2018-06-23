@@ -40,6 +40,39 @@ public class PostController {
         return new ResponseEntity<List<PostDTO>>(postDTOS,HttpStatus.OK);
     }
 
+    @GetMapping(value = "/order/{orderBy}")
+        public ResponseEntity<List<PostDTO>> getPostsOrdered(@PathVariable("orderBy") String orderBy){
+            List<Post> posts=null;
+            if(orderBy.equals("date")){
+                posts=postServiceInterface.findAllByOrOrderByDate();
+            }else if(orderBy.equals("likes")){
+                posts=postServiceInterface.findAllByOrderByLikes();
+            }else if(orderBy.equals("dislikes")){
+                posts=postServiceInterface.findAllByOrderByDislike();
+            }else{
+                posts=postServiceInterface.findAllOrOrderByCommentsCount();
+            }
+            List<PostDTO> postDTOS=new ArrayList<>();
+        for (Post post:posts) {
+            postDTOS.add(new PostDTO(post));
+        }
+        return new ResponseEntity<List<PostDTO>>(postDTOS,HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/search/{text}")
+    public ResponseEntity<List<PostDTO>> getPostSearched(@PathVariable("text") String text){
+        List<Post> posts=postServiceInterface.findAllBySearch(text);
+
+        List<PostDTO> postDTOS=new ArrayList<>();
+        for (Post post:posts) {
+            postDTOS.add(new PostDTO(post));
+        }
+        return new ResponseEntity<List<PostDTO>>(postDTOS,HttpStatus.OK);
+    }
+
+
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<PostDTO> getPost(@PathVariable("id") Integer id){
         Post post=postServiceInterface.findOne(id);

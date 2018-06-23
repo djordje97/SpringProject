@@ -15,4 +15,11 @@ public interface PostServiceInterface {
     Post save(Post posts);
 
     void remove(Integer id);
+
+    List<Post> findAllByOrOrderByDate();
+    List<Post> findAllByOrderByLikes();
+    List<Post> findAllByOrderByDislike();
+    List<Post> findAllOrOrderByCommentsCount();
+
+    List<Post> findAllBySearch(String text);
 }

@@ -71,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/api/users").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/tags/add/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/users/role/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/get/role/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/get/role/**","/api/posts/order/**","/api/comments/post/order/**","/api/posts/search/**").permitAll()
                 //svaki zahtev mora biti autorizovan
                 .anyRequest().authenticated().and()
                 //presretni svaki zahtev filterom
@@ -105,7 +105,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/api/posts/**",
                 "/api/comments/**",
                 "/api/users/allUsername",
-               "/api/get/role/**"
+               "/api/get/role/**",
+                "/api/posts/order/**",
+                "/api/comments/post/order/**",
+                "/api/posts/search/**"
         );
 
     }

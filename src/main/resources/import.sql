@@ -15,6 +15,7 @@ INSERT INTO posts(title,description,date,likes,dislikes,latitude,longitude,user_
 INSERT INTO comments(title,description,date,likes,dislike,post_id,user_id)VALUES ('My comments','This is the best movie ever','2018-4-3',4,0,1,2);
 
 INSERT INTO comments(title,description,date,likes,dislike,post_id,user_id)VALUES ('Best','This is awesome','2018-4-3',4,0,2,1);
+INSERT INTO comments(title,description,date,likes,dislike,post_id,user_id)VALUES ('Best','This is awesome','2018-4-3',4,0,2,1);
 
 INSERT INTO tags(name)VALUES ('best');
 INSERT INTO tags(name)VALUES ('new');
