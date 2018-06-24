@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //svim korisnicima dopusti da pristupe putanjama /auth/**
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/tags/add/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/tags/add/**","/api/users/image").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/users/role/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/get/role/**","/api/posts/order/**","/api/comments/post/order/**","/api/posts/search/**").permitAll()
                 //svaki zahtev mora biti autorizovan
@@ -81,6 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+
     //Generalna bezbednost aplikacije
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -89,7 +90,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 HttpMethod.POST,
                 "/api/auth/login",
                 "/api/users",
-                "/api/tags/add/**"
+                "/api/tags/add/**",
+                "/api/users/image"
 
         );
         web.ignoring().antMatchers(HttpMethod.PUT,"/api/users/role/**");
@@ -112,5 +114,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         );
 
     }
+
+
 
 }

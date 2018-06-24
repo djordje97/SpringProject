@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/comments")
+@CrossOrigin("*")
 public class CommentController {
 
 

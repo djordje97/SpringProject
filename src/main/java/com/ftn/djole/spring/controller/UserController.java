@@ -2,20 +2,20 @@ package com.ftn.djole.spring.controller;
 
 import com.ftn.djole.spring.dto.UserDTO;
 import com.ftn.djole.spring.entity.Authority;
+import com.ftn.djole.spring.entity.Post;
 import com.ftn.djole.spring.entity.User;
 import com.ftn.djole.spring.service.AuthorityServiceInterface;
 import com.ftn.djole.spring.service.UserServiceIterface;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
-import javax.servlet.ServletContext;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 
@@ -23,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/users")
+@CrossOrigin("*")
 public class UserController {
 
 
@@ -34,9 +35,6 @@ public class UserController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
-    @Autowired
-    ServletContext context;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>>getUsers(){
@@ -91,6 +89,10 @@ public class UserController {
         Authority authority=authorityServiceInterface.findByName(roleName);
         if(u.getUserAuthority().size() >0) {
             u.getUserAuthority().clear();
+            u.getUserAuthority().add(authority);
+            userServiceIterface.save(u);
+        }else{
+            u.getUserAuthority().add(authority);
             userServiceIterface.save(u);
         }
         return new ResponseEntity<>(true,HttpStatus.OK);
@@ -102,6 +104,20 @@ public class UserController {
         if(user ==null)
             return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
         return  new ResponseEntity<UserDTO>(new UserDTO(user),HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/image")
+    public ResponseEntity<UserDTO> uploadImage(@RequestParam("username") String  username, @RequestParam("file")MultipartFile file){
+        User user=userServiceIterface.findByUsername(username);
+        try {
+            user.setPhoto(file.getBytes());
+            user=userServiceIterface.save(user);
+            return  new ResponseEntity<>(new UserDTO(user),HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping(consumes = "application/json")

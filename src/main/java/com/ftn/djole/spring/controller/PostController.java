@@ -2,8 +2,10 @@ package com.ftn.djole.spring.controller;
 
 import com.ftn.djole.spring.dto.PostDTO;
 import com.ftn.djole.spring.dto.TagDTO;
+import com.ftn.djole.spring.dto.UserDTO;
 import com.ftn.djole.spring.entity.Post;
 import com.ftn.djole.spring.entity.Tag;
+import com.ftn.djole.spring.entity.User;
 import com.ftn.djole.spring.service.PostServiceInterface;
 import com.ftn.djole.spring.service.TagServiceInterfce;
 import com.ftn.djole.spring.service.UserServiceIterface;
@@ -12,13 +14,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/posts")
+@CrossOrigin("*")
 public class PostController {
 
     @Autowired
@@ -112,6 +117,20 @@ public class PostController {
 
         post=postServiceInterface.save(post);
         return  new ResponseEntity<PostDTO>(new PostDTO(post),HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/image")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<PostDTO> uploadImage(@RequestParam("id") Integer  id, @RequestParam("file")MultipartFile file){
+        Post post=postServiceInterface.findOne(id);
+        try {
+            post.setPhoto(file.getBytes());
+            post=postServiceInterface.save(post);
+            return  new ResponseEntity<>(new PostDTO(post),HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping(value = "/{id}",consumes = "application/json")

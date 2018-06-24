@@ -167,16 +167,18 @@ public class User implements Serializable,UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
     @Override
     public String toString() {
-        return "Users{" +
+        return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", photo=" + Arrays.toString(photo) +
+                ", photo='" + photo + '\'' +
                 ", comments=" + comments +
-                ", poste=" + posts +
+                ", posts=" + posts +
+                ", userAuthority=" + userAuthority +
                 '}';
     }
 }

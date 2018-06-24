@@ -26,7 +26,6 @@ public class UserDTO implements Serializable {
         this.photo = photo;
     }
 
-
     public UserDTO(User user) {
         this(user.getId(),user.getName(),user.getUsername(),user.getPassword(),user.getPhoto());
     }
@@ -70,5 +69,4 @@ public class UserDTO implements Serializable {
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
-
 }
